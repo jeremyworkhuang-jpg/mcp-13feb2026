@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const sectionId = e.target.getAttribute('href').substring(1);
+            const sectionId = e.currentTarget.getAttribute('href').substring(1);
             showSection(sectionId);
         });
     });
