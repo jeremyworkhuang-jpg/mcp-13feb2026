@@ -1,13 +1,141 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>myapp</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeGIVE - Surplus Redistribution</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1 class="logo">WeGIVE</h1>
+            <nav class="main-nav">
+                <a href="#donor-section" class="nav-link active">For Donors</a>
+                <a href="#ngo-section" class="nav-link">For NGOs</a>
+                <a href="#reporting-section" class="nav-link">Reporting</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Corporate Donor Interface -->
+        <section id="donor-section" class="interface-section">
+            <header class="section-header">
+                <h2 class="section-title">Corporate Donor Portal</h2>
+                <p class="section-subtitle">Turn your surplus assets into social impact.</p>
+            </header>
+
+            <div class="card estimation-card">
+                <h3 class="card-title"><span class="material-icons">calculate</span> Surplus Estimation Tool</h3>
+                <div class="estimation-tool">
+                    <div class="form-group">
+                        <label for="planned-pax">Planned Pax</label>
+                        <input type="number" id="planned-pax" placeholder="e.g., 100">
+                    </div>
+                    <div class="form-group">
+                        <label for="actual-attendance">Actual Attendance</label>
+                        <input type="number" id="actual-attendance" placeholder="e.g., 85">
+                    </div>
+                    <button id="calculate-surplus" class="btn btn-secondary">Estimate Surplus</button>
+                    <div id="surplus-result" class="surplus-result-container" aria-live="polite"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="material-icons">post_add</span> List Surplus Goods</h3>
+                <form id="surplus-form" class="surplus-form">
+                    <div class="form-group">
+                        <label for="item-description">Goods Description</label>
+                        <input type="text" id="item-description" placeholder="e.g., Packaged Sandwiches & Salads" required>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="quantity">Quantity (units)</label>
+                            <input type="number" id="quantity" placeholder="e.g., 50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="date" id="expiry-date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup-address">Pickup Address</label>
+                        <input type="text" id="pickup-address" placeholder="e.g., 81 Victoria St, Singapore 188065" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="donor-name">Donor Name / Company</label>
+                        <input type="text" id="donor-name" placeholder="e.g., SMU" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><span class="material-icons">add_circle</span> Add to Marketplace</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- NGO/Recipient Interface -->
+        <section id="ngo-section" class="interface-section">
+            <header class="section-header">
+                <h2 class="section-title">NGO Marketplace</h2>
+                <p class="section-subtitle">Find and claim available surplus goods from corporate donors.</p>
+            </header>
+            
+            <div id="map-container" class="map-container card">
+                 <h3 class="card-title"><span class="material-icons">place</span> Geo-Location Match</h3>
+                 <div id="map" aria-label="Map showing locations of available surplus items">
+                     <!-- MCP: Google Maps will be initialized here -->
+                 </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="material-icons">storefront</span> Available Donations</h3>
+                <div id="marketplace-listings" class="marketplace-grid">
+                    <!-- Surplus items will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Reporting Section -->
+        <section id="reporting-section" class="interface-section">
+             <header class="section-header">
+                <h2 class="section-title">Impact Reporting</h2>
+                <p class="section-subtitle">Track the positive impact of your donations.</p>
+            </header>
+            <div class="card">
+                <h3 class="card-title"><span class="material-icons">dashboard</span> Impact Dashboard</h3>
+                <p>Generate a downloadable report of all redistributed assets, including waste diverted and estimated carbon savings.</p>
+                <button id="generate-report" class="btn btn-primary"><span class="material-icons">download</span> Download Impact Report (CSV)</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for NGO item interaction -->
+    <div id="item-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h3 id="modal-title" class="card-title">Donation Details</h3>
+                <button id="close-modal" class="close-modal-btn" aria-label="Close dialog">&times;</button>
+            </header>
+            <div id="modal-body" class="modal-body">
+                <!-- Item details will be dynamically inserted here -->
+            </div>
+            <footer id="modal-footer" class="modal-footer">
+                <!-- Action buttons will be dynamically inserted here -->
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnOXlICAicLh2i0MBFh1a72YWTBMbboEA&callback=initMap&libraries=geometry,places" async defer></script>
+    <script src="app.js"></script>
+</body>
 </html>
