@@ -372,6 +372,24 @@ input:focus {
     gap: 15px;
 }
 
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: var(--brand-background-subtle);
+    color: var(--brand-green-dark);
+    border-left: 5px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.success-message .material-icons {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
     body { padding-top: 80px; }

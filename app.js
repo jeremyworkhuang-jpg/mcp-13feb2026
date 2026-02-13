@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     calculateBtn.addEventListener('click', handleEstimation);
-    surplusForm.addEventListener('submit', handleSurplusSubmit);
+    surplusForm.addEventListener('submit', (e) => handleSurplusSubmit(e, showSection));
     generateReportBtn.addEventListener('click', generateReport);
     closeModalBtn.addEventListener('click', closeModal);
     window.addEventListener('click', (e) => {
@@ -153,8 +153,9 @@ function updateMapMarkers() {
     }
 }
 
-async function handleSurplusSubmit(e) {
+async function handleSurplusSubmit(e, showSection) {
     e.preventDefault();
+    const successMessage = document.getElementById('success-message');
     const newItem = {
         id: `item-${Date.now()}`,
         description: document.getElementById('item-description').value,
@@ -180,6 +181,13 @@ async function handleSurplusSubmit(e) {
     updateMapMarkers();
     e.target.reset();
     document.getElementById('surplus-result').style.display = 'none';
+
+    // Show success message and redirect
+    successMessage.style.display = 'block';
+    setTimeout(() => {
+        successMessage.style.display = 'none';
+        showSection('ngo-section');
+    }, 2500); // 2.5-second delay before switching
 }
 
 function geocodeAddress(address) {
@@ -254,28 +262,59 @@ function handleEstimation() {
 
 function generateReport() {
     if (surplusItems.length === 0) {
-        alert('No data to report.');
+        alert('No data available to generate a report.');
         return;
     }
-    const headers = ['ItemID', 'Description', 'Quantity', 'ExpiryDate', 'Donor', 'Status', 'WasteDiverted_kg', 'CarbonSaved_kgCO2e'];
-    const AVG_WEIGHT_PER_UNIT_KG = 0.5;
-    const CO2_SAVED_PER_KG = 1.8;
-    const rows = surplusItems.map(item => [
-        item.id,
-        `"${item.description.replace(/"/g, '""')}"`,
-        item.quantity,
-        item.expiryDate,
-        `"${item.donorName.replace(/"/g, '""')}"`,
-        item.status,
-        (item.status === 'Collected' ? item.quantity * AVG_WEIGHT_PER_UNIT_KG : 0),
-        (item.status === 'Collected' ? item.quantity * AVG_WEIGHT_PER_UNIT_KG * CO2_SAVED_PER_KG : 0).toFixed(2)
-    ]);
-    const csvContent = "data:text/csv;charset=utf-8," + headers.join(',') + '\n' + rows.map(e => e.join(',')).join('\n');
+
+    // ESG Aligned Headers
+    const headers = [
+        // Governance
+        'G_RecordID', 'G_DonorName', 'G_Status', 'G_Verification',
+        // Social
+        'S_ItemDescription', 'S_Quantity', 'S_MealsEquivalent',
+        // Environmental
+        'E_ExpiryDate', 'E_WasteDiverted_kg', 'E_CarbonSavings_kgCO2e'
+    ];
+
+    // Constants for metric calculation
+    const AVG_WEIGHT_PER_UNIT_KG = 0.5; // Average weight of a single donated food unit in kg
+    const CO2_SAVED_PER_KG = 1.8;       // kg of CO2 equivalent saved per kg of food waste diverted
+    const MEAL_EQUIVALENT_KG = 0.4;     // Average weight of a meal in kg
+
+    const rows = surplusItems.map(item => {
+        const isCollected = item.status === 'Collected' || item.status === 'Claimed';
+        const wasteDiverted = isCollected ? item.quantity * AVG_WEIGHT_PER_UNIT_KG : 0;
+        const carbonSaved = isCollected ? wasteDiverted * CO2_SAVED_PER_KG : 0;
+        const mealsEquivalent = isCollected ? Math.floor(wasteDiverted / MEAL_EQUIVALENT_KG) : 0;
+
+        return [
+            // Governance
+            item.id,
+            `"${item.donorName.replace(/"/g, '""')}"`,
+            item.status,
+            isCollected ? 'Verified' : 'Pending',
+            // Social
+            `"${item.description.replace(/"/g, '""')}"`,
+            item.quantity,
+            mealsEquivalent,
+            // Environmental
+            item.expiryDate,
+            wasteDiverted.toFixed(2),
+            carbonSaved.toFixed(2)
+        ];
+    });
+
+    const csvContent = "data:text/csv;charset=utf-8," +
+        headers.join(',') + '\n' +
+        rows.map(e => e.join(',')).join('\n');
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `wegive_impact_report_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `wegive_esg_impact_report_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    console.log('%c[Report] ESG Impact Report generated and download initiated.', 'color: blue; font-weight: bold;');
 }

@@ -1,0 +1,4 @@
+ItemID,Description,Quantity,ExpiryDate,Donor,Status,WasteDiverted_kg,CarbonSaved_kgCO2e
+item-1,"Canned Beans",100,2024-12-31,"Generous Donor A",Collected,50.0,90.00
+item-2,"Fresh Bread",50,2024-07-20,"Local Bakery",Available,0,0.00
+item-3,"Milk Cartons",200,2024-08-01,"Supermarket Surplus",Collected,100.0,180.00
