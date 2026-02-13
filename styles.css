@@ -1,4 +1,4 @@
-:root {
+''':root {
     --primary-color: #4CAF50; /* Green for growth and sustainability */
     --primary-hover: #45a049;
     --secondary-color: #FFC107; /* Amber for warmth and urgency */
@@ -223,18 +223,12 @@ input:focus {
     display: none; /* Hidden by default */
 }
 
-.map-container {
+/* --- Map --- */
+.map-container #map {
     height: 400px;
-}
-#map {
-    height: calc(100% - 70px); /* Adjust for card title */
-    background: var(--grey-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-style: italic;
+    width: 100%;
     border-radius: 5px;
+    background: var(--grey-color); /* Placeholder color */
 }
 
 .marketplace-grid {
@@ -357,3 +351,4 @@ input:focus {
         grid-template-columns: 1fr;
     }
 }
+'''

@@ -29,7 +29,7 @@
     </header>
 
     <main class="container">
-        <!-- Corporate Donor Interface -->
+        <!-- Corporate Donor Interface (Visible by default) -->
         <section id="donor-section" class="interface-section">
             <header class="section-header">
                 <h2 class="section-title">Corporate Donor Portal</h2>
@@ -82,18 +82,16 @@
             </div>
         </section>
 
-        <!-- NGO/Recipient Interface -->
-        <section id="ngo-section" class="interface-section">
+        <!-- NGO/Recipient Interface (Hidden by default) -->
+        <section id="ngo-section" class="interface-section" style="display: none;">
             <header class="section-header">
                 <h2 class="section-title">NGO Marketplace</h2>
                 <p class="section-subtitle">Find and claim available surplus goods from corporate donors.</p>
             </header>
             
-            <div id="map-container" class="map-container card">
+            <div class="card map-container">
                  <h3 class="card-title"><span class="material-icons">place</span> Geo-Location Match</h3>
-                 <div id="map" aria-label="Map showing locations of available surplus items">
-                     <!-- MCP: Google Maps will be initialized here -->
-                 </div>
+                 <div id="map"></div>
             </div>
 
             <div class="card">
@@ -104,8 +102,8 @@
             </div>
         </section>
         
-        <!-- Reporting Section -->
-        <section id="reporting-section" class="interface-section">
+        <!-- Reporting Section (Hidden by default) -->
+        <section id="reporting-section" class="interface-section" style="display: none;">
              <header class="section-header">
                 <h2 class="section-title">Impact Reporting</h2>
                 <p class="section-subtitle">Track the positive impact of your donations.</p>
@@ -135,7 +133,7 @@
         </div>
     </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnOXlICAicLh2i0MBFh1a72YWTBMbboEA&callback=initMap&libraries=geometry,places" async defer></script>
     <script src="app.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnOXlICAicLh2i0MBFh1a72YWTBMbboEA&callback=initMap&libraries=geometry,places" defer></script>
 </body>
 </html>
